@@ -14,7 +14,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -45,31 +48,53 @@ public class IndexController {
     // --------------------------------- ollama chat ---------------------------------
 
     @Resource
-    private ChatClient chatClient;
-    private static String prompt = "你好，你是一个研发工程师，擅长解决技术类问题。";
+    private OllamaChatModel ollamaChatModel;
+    private String prompt = "你好，你是一个研发工程师，擅长解决技术类问题。";
+    private String modle = "qwen3:0.6b";
 
     /**
      * ChatClient 简单调用
      */
     @GetMapping("/chat/simple")
     @ResponseBody
-    public String simpleChat(@RequestParam(value = "input") String input) {
-        String result = chatClient
+    public String simpleChat(@RequestParam(value = "input", required = false, defaultValue = "介绍你自己") String input) {
+
+        // build chat-client
+        ChatClient ollamaChatClient = ChatClient
+                .builder(ollamaChatModel)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())       // add memory
+                .defaultAdvisors(SimpleLoggerAdvisor.builder().build())                                                     // add logger
+                .defaultOptions(OllamaChatOptions.builder().model(modle).build())                                           // assign model
+                .build();
+
+        // call ollama
+        String response = ollamaChatClient
                 .prompt(prompt)
                 .user(input)
                 .call()
                 .content();
-        System.out.println("result: " + result);
-        return result;
+
+        logger.info("result: " + response);
+        return response;
     }
 
     /**
      * ChatClient 流式调用
      */
     @GetMapping("/chat/stream")
-    public Flux<String> streamChat(HttpServletResponse response, @RequestParam(value = "input") String input) {
+    public Flux<String> streamChat(HttpServletResponse response, @RequestParam(value = "input", required = false, defaultValue = "介绍你自己") String input) {
         response.setCharacterEncoding("UTF-8");
-        return chatClient
+
+        // build chat-client
+        ChatClient ollamaChatClient = ChatClient
+                .builder(ollamaChatModel)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(MessageWindowChatMemory.builder().build()).build())
+                .defaultAdvisors(SimpleLoggerAdvisor.builder().build())
+                .defaultOptions(OllamaChatOptions.builder().model(modle).build())
+                .build();
+
+        // call ollama
+        return ollamaChatClient
                 .prompt(prompt)
                 .user(input)
                 .stream()
@@ -80,12 +105,12 @@ public class IndexController {
     // --------------------------------- dify workflow ---------------------------------
 
     // dify config sample
-    private final String apiKey = "http://localhost/v1";
-    private final String baseUrl = "app-OUVgNUOQRIMokfmuJvBJoUTN";
+    private final String apiKey = "app-46gHBiqUb5jqAHl9TDWwnRZ8";
+    private final String baseUrl = "http://localhost/v1";
 
     @GetMapping("/dify/simple")
     @ResponseBody
-    public String difySimple(@RequestParam(required = false, value = "input") String input) throws IOException {
+    public String difySimple(@RequestParam(required = false, value = "input") String input) throws Exception {
 
         Map<String, Object> inputs = new HashMap<>();
         inputs.put("input", input);
@@ -167,7 +192,7 @@ public class IndexController {
                             sink.error(throwable);
                         }
                     });
-                } catch (IOException e) {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }

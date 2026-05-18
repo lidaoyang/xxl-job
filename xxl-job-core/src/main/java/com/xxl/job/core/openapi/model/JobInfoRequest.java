@@ -1,0 +1,198 @@
+package com.xxl.job.core.openapi.model;
+
+import java.io.Serial;
+import java.io.Serializable;
+
+/**
+ * job info model for openapi
+ */
+public class JobInfoRequest implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 42L;
+
+    private int id;                // 主键ID
+
+    private int jobGroup;        // 执行器主键ID
+    private String jobDesc;
+
+    private String author;        // 负责人
+    private String alarmUrl;    // 报警邮件
+    private Integer alarmType; // 报警类型(0:不报警;1:邮件;2:企业微信;3:飞书;4:钉钉;5:webhook)
+
+    private String scheduleType;            // 调度类型：ScheduleTypeEnum
+    private String scheduleConf;            // 调度配置，值含义取决于调度类型
+    private String misfireStrategy;            // 调度过期策略：MisfireStrategyEnum
+
+    private String executorRouteStrategy;    // 执行器路由策略：ExecutorRouteStrategyEnum
+    private String executorHandler;            // 执行器，任务Handler名称
+    private String executorParam;            // 执行器，任务参数
+    private String executorBlockStrategy;    // 阻塞处理策略：ExecutorBlockStrategyEnum
+    private int executorTimeout;            // 任务执行超时时间，单位秒
+    private int executorFailRetryCount;        // 失败重试次数
+    private Boolean executorFailStop;       // 执行失败后是否停止(默认true)
+
+    private int triggerStatus;        // 调度状态：0-停止，1-运行
+    private long triggerLastTime;    // 上次调度时间
+    private long triggerNextTime;    // 下次调度时间
+    private long endTime;    // 任务结束时间,当前时间大于任务结束时间则停止任务
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getJobGroup() {
+        return jobGroup;
+    }
+
+    public void setJobGroup(int jobGroup) {
+        this.jobGroup = jobGroup;
+    }
+
+    public String getJobDesc() {
+        return jobDesc;
+    }
+
+    public void setJobDesc(String jobDesc) {
+        this.jobDesc = jobDesc;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAlarmUrl() {
+        return alarmUrl;
+    }
+
+    public void setAlarmUrl(String alarmUrl) {
+        this.alarmUrl = alarmUrl;
+    }
+
+    public Integer getAlarmType() {
+        return alarmType;
+    }
+
+    public void setAlarmType(Integer alarmType) {
+        this.alarmType = alarmType;
+    }
+
+    public String getScheduleType() {
+        return scheduleType;
+    }
+
+    public void setScheduleType(String scheduleType) {
+        this.scheduleType = scheduleType;
+    }
+
+    public String getScheduleConf() {
+        return scheduleConf;
+    }
+
+    public void setScheduleConf(String scheduleConf) {
+        this.scheduleConf = scheduleConf;
+    }
+
+    public String getMisfireStrategy() {
+        return misfireStrategy;
+    }
+
+    public void setMisfireStrategy(String misfireStrategy) {
+        this.misfireStrategy = misfireStrategy;
+    }
+
+    public String getExecutorRouteStrategy() {
+        return executorRouteStrategy;
+    }
+
+    public void setExecutorRouteStrategy(String executorRouteStrategy) {
+        this.executorRouteStrategy = executorRouteStrategy;
+    }
+
+    public String getExecutorHandler() {
+        return executorHandler;
+    }
+
+    public void setExecutorHandler(String executorHandler) {
+        this.executorHandler = executorHandler;
+    }
+
+    public String getExecutorParam() {
+        return executorParam;
+    }
+
+    public void setExecutorParam(String executorParam) {
+        this.executorParam = executorParam;
+    }
+
+    public String getExecutorBlockStrategy() {
+        return executorBlockStrategy;
+    }
+
+    public void setExecutorBlockStrategy(String executorBlockStrategy) {
+        this.executorBlockStrategy = executorBlockStrategy;
+    }
+
+    public int getExecutorTimeout() {
+        return executorTimeout;
+    }
+
+    public void setExecutorTimeout(int executorTimeout) {
+        this.executorTimeout = executorTimeout;
+    }
+
+    public int getExecutorFailRetryCount() {
+        return executorFailRetryCount;
+    }
+
+    public void setExecutorFailRetryCount(int executorFailRetryCount) {
+        this.executorFailRetryCount = executorFailRetryCount;
+    }
+
+    public Boolean getExecutorFailStop() {
+        return this.executorFailStop == null || this.executorFailStop;
+    }
+
+    public void setExecutorFailStop(Boolean executorFailStop) {
+        this.executorFailStop = executorFailStop;
+    }
+
+    public int getTriggerStatus() {
+        return triggerStatus;
+    }
+
+    public void setTriggerStatus(int triggerStatus) {
+        this.triggerStatus = triggerStatus;
+    }
+
+    public long getTriggerLastTime() {
+        return triggerLastTime;
+    }
+
+    public void setTriggerLastTime(long triggerLastTime) {
+        this.triggerLastTime = triggerLastTime;
+    }
+
+    public long getTriggerNextTime() {
+        return triggerNextTime;
+    }
+
+    public void setTriggerNextTime(long triggerNextTime) {
+        this.triggerNextTime = triggerNextTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+}

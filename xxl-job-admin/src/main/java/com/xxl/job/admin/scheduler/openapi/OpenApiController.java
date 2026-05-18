@@ -4,6 +4,7 @@ import com.xxl.job.admin.scheduler.config.XxlJobAdminBootstrap;
 import com.xxl.job.core.constant.Const;
 import com.xxl.job.core.openapi.AdminBiz;
 import com.xxl.job.core.openapi.model.CallbackRequest;
+import com.xxl.job.core.openapi.model.JobInfoRequest;
 import com.xxl.job.core.openapi.model.RegistryRequest;
 import com.xxl.sso.core.annotation.XxlSso;
 import com.xxl.tool.core.StringTool;
@@ -32,9 +33,9 @@ public class OpenApiController {
     @ResponseBody
     @XxlSso(login = false)
     public Object api(HttpServletRequest request,
-                               @PathVariable("uri") String uri,
-                               @RequestHeader(value = Const.XXL_JOB_ACCESS_TOKEN, required = false) String accesstoken,
-                               @RequestBody(required = false) String requestBody) {
+                      @PathVariable("uri") String uri,
+                      @RequestHeader(value = Const.XXL_JOB_ACCESS_TOKEN, required = false) String accesstoken,
+                      @RequestBody(required = false) String requestBody) {
 
         // valid
         if (!"POST".equalsIgnoreCase(request.getMethod())) {
@@ -49,28 +50,43 @@ public class OpenApiController {
 
         // valid token
         if (StringTool.isNotBlank(XxlJobAdminBootstrap.getInstance().getAccessToken())
-                && !XxlJobAdminBootstrap.getInstance().getAccessToken().equals(accesstoken)) {
+            && !XxlJobAdminBootstrap.getInstance().getAccessToken().equals(accesstoken)) {
             return Response.ofFail("The access token is wrong.");
         }
 
         // dispatch request
         try {
-            switch (uri) {
-                case "callback": {
+            return switch (uri) {
+                case "callback" -> {
                     List<CallbackRequest> callbackParamList = GsonTool.fromJson(requestBody, List.class, CallbackRequest.class);
-                    return adminBiz.callback(callbackParamList);
+                    yield adminBiz.callback(callbackParamList);
                 }
-                case "registry": {
+                case "registry" -> {
                     RegistryRequest registryParam = GsonTool.fromJson(requestBody, RegistryRequest.class);
-                    return adminBiz.registry(registryParam);
+                    yield adminBiz.registry(registryParam);
                 }
-                case "registryRemove": {
+                case "registryRemove" -> {
                     RegistryRequest registryParam = GsonTool.fromJson(requestBody, RegistryRequest.class);
-                    return adminBiz.registryRemove(registryParam);
-                    }
-                default:
-                    return Response.ofFail("invalid request, uri-mapping("+ uri +") not found.");
-            }
+                    yield adminBiz.registryRemove(registryParam);
+                }
+                case "addJob" -> {
+                    JobInfoRequest jobInfoParam = GsonTool.fromJson(requestBody, JobInfoRequest.class);
+                    yield adminBiz.addJob(jobInfoParam);
+                }
+                case "removeJob" -> {
+                    Integer jobId = GsonTool.fromJson(requestBody, Integer.class);
+                    yield adminBiz.removeJob(jobId);
+                }
+                case "startJob" -> {
+                    Integer jobId = GsonTool.fromJson(requestBody, Integer.class);
+                    yield adminBiz.startJob(jobId);
+                }
+                case "stopJob" -> {
+                    Integer jobId = GsonTool.fromJson(requestBody, Integer.class);
+                    yield adminBiz.stopJob(jobId);
+                }
+                default -> Response.ofFail("invalid request, uri-mapping(" + uri + ") not found.");
+            };
         } catch (Exception e) {
             return Response.ofFail("openapi invoke error: " + e.getMessage());
         }

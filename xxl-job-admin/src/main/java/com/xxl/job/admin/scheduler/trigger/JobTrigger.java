@@ -48,8 +48,8 @@ public class JobTrigger {
      * @param jobId
      * @param triggerType
      * @param failRetryCount
-     * 			>=0: use this param
-     * 			<0: use param from job info config
+     * 			 &gt;=0: use this param
+     * 			 &lt;0: use param from job info config
      * @param executorShardingParam
      *          null: new sharding, all nodes
      *          not null: for retry, only one node

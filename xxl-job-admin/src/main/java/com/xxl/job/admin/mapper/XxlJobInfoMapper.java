@@ -32,6 +32,8 @@ public interface XxlJobInfoMapper {
 	public int save(XxlJobInfo info);
 
 	public XxlJobInfo loadById(@Param("id") int id);
+
+	public int getJobId(@Param("jobGroup") int jobGroup, @Param("jobDesc") String jobDesc);
 	
 	public int update(XxlJobInfo xxlJobInfo);
 	

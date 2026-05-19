@@ -49,7 +49,7 @@ public interface AdminBiz {
     /**
      * add job
      *
-     * @param jobInfo
+     * @param jobInfo 任务信息(约定:任务描述保证唯一,为了后面停止删除等操作方便查询)
      * @return
      */
     public Response<String> addJob(JobInfoRequest jobInfo);
@@ -57,24 +57,27 @@ public interface AdminBiz {
     /**
      * remove job
      *
-     * @param jobId
+     * @param jobGroup 任务组
+     * @param jobName 任务名称
      * @return
      */
-    public Response<String> removeJob(int jobId);
+    public Response<String> removeJob(int jobGroup, String jobName);
 
     /**
      * start job
      *
-     * @param jobId
+     * @param jobGroup 任务组
+     * @param jobName 任务名称
      * @return
      */
-    public Response<String> startJob(int jobId);
+    public Response<String> startJob(int jobGroup, String jobName);
 
     /**
      * stop job
      *
-     * @param jobId
+     * @param jobGroup 任务组
+     * @param jobName 任务名称
      * @return
      */
-    public Response<String> stopJob(int jobId);
+    public Response<String> stopJob(int jobGroup, String jobName);
 }

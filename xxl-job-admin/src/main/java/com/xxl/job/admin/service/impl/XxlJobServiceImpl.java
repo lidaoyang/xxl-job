@@ -543,4 +543,8 @@ public class XxlJobServiceImpl implements XxlJobService {
         return Response.ofSuccess(result);
     }
 
+    @Override
+    public Integer getJobId(int jobGroup, String jobDesc) {
+        return xxlJobInfoMapper.getJobId(jobGroup, jobDesc);
+    }
 }

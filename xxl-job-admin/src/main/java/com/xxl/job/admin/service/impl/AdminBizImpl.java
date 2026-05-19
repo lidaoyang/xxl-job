@@ -67,25 +67,32 @@ public class AdminBizImpl implements AdminBiz {
     }
 
     @Override
-    public Response<String> removeJob(int jobId) {
-        if (jobId <= 0) {
-            return Response.ofFail("任务ID不能为空");
+    public Response<String> removeJob(int jobGroup, String jobName) {
+        if (jobName == null || jobName.isEmpty()) {
+            return Response.ofFail("任务名称不能为空");
         }
+        Integer jobId = xxlJobService.getJobId(jobGroup, jobName);
+        if (jobId == null) {
+            return Response.ofFail("任务不存在");
+        }
+
         return xxlJobService.remove(jobId, getLoginInfo());
     }
 
     @Override
-    public Response<String> startJob(int jobId) {
-        if (jobId <= 0) {
-            return Response.ofFail("任务ID不能为空");
+    public Response<String> startJob(int jobGroup, String jobName) {
+        Integer jobId = xxlJobService.getJobId(jobGroup, jobName);
+        if (jobId == null) {
+            return Response.ofFail("任务不存在");
         }
         return xxlJobService.start(jobId, getLoginInfo());
     }
 
     @Override
-    public Response<String> stopJob(int jobId) {
-        if (jobId <= 0) {
-            return Response.ofFail("任务ID不能为空");
+    public Response<String> stopJob(int jobGroup, String jobName) {
+        Integer jobId = xxlJobService.getJobId(jobGroup, jobName);
+        if (jobId == null) {
+            return Response.ofFail("任务不存在");
         }
 
         return xxlJobService.stop(jobId, getLoginInfo());

@@ -15,7 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xuxueli on 17/5/10.
@@ -74,16 +76,22 @@ public class OpenApiController {
                     yield adminBiz.addJob(jobInfoParam);
                 }
                 case "removeJob" -> {
-                    Integer jobId = GsonTool.fromJson(requestBody, Integer.class);
-                    yield adminBiz.removeJob(jobId);
+                    Map<String, Object> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, Object.class);
+                    String jobName = jsonMap.get("jobName").toString();
+                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup").toString());
+                    yield adminBiz.removeJob(jobGroup, jobName);
                 }
                 case "startJob" -> {
-                    Integer jobId = GsonTool.fromJson(requestBody, Integer.class);
-                    yield adminBiz.startJob(jobId);
+                    Map<String, Object> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, Object.class);
+                    String jobName = jsonMap.get("jobName").toString();
+                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup").toString());
+                    yield adminBiz.startJob(jobGroup, jobName);
                 }
                 case "stopJob" -> {
-                    Integer jobId = GsonTool.fromJson(requestBody, Integer.class);
-                    yield adminBiz.stopJob(jobId);
+                    Map<String, Object> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, Object.class);
+                    String jobName = jsonMap.get("jobName").toString();
+                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup").toString());
+                    yield adminBiz.stopJob(jobGroup, jobName);
                 }
                 default -> Response.ofFail("invalid request, uri-mapping(" + uri + ") not found.");
             };

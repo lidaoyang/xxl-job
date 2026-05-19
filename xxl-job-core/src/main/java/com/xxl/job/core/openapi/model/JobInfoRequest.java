@@ -10,8 +10,6 @@ public class JobInfoRequest implements Serializable {
     @Serial
     private static final long serialVersionUID = 42L;
 
-    private int id;                // 主键ID
-
     private int jobGroup;        // 执行器主键ID
     private String jobDesc;
 
@@ -31,18 +29,16 @@ public class JobInfoRequest implements Serializable {
     private int executorFailRetryCount;        // 失败重试次数
     private Boolean executorFailStop;       // 执行失败后是否停止(默认true)
 
+    private String glueType;        // GLUE类型：GlueTypeEnum
+    private String glueSource;        // GLUE源代码
+    private String glueRemark;        // GLUE备注
+
+    private String childJobId;        // 子任务ID，多个逗号分隔
+
     private int triggerStatus;        // 调度状态：0-停止，1-运行
     private long triggerLastTime;    // 上次调度时间
     private long triggerNextTime;    // 下次调度时间
     private long endTime;    // 任务结束时间,当前时间大于任务结束时间则停止任务
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getJobGroup() {
         return jobGroup;
@@ -157,11 +153,43 @@ public class JobInfoRequest implements Serializable {
     }
 
     public Boolean getExecutorFailStop() {
-        return this.executorFailStop == null || this.executorFailStop;
+        return executorFailStop;
     }
 
     public void setExecutorFailStop(Boolean executorFailStop) {
         this.executorFailStop = executorFailStop;
+    }
+
+    public String getGlueType() {
+        return glueType;
+    }
+
+    public void setGlueType(String glueType) {
+        this.glueType = glueType;
+    }
+
+    public String getGlueSource() {
+        return glueSource;
+    }
+
+    public void setGlueSource(String glueSource) {
+        this.glueSource = glueSource;
+    }
+
+    public String getGlueRemark() {
+        return glueRemark;
+    }
+
+    public void setGlueRemark(String glueRemark) {
+        this.glueRemark = glueRemark;
+    }
+
+    public String getChildJobId() {
+        return childJobId;
+    }
+
+    public void setChildJobId(String childJobId) {
+        this.childJobId = childJobId;
     }
 
     public int getTriggerStatus() {

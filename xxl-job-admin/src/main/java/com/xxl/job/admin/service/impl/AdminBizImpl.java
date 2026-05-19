@@ -62,7 +62,7 @@ public class AdminBizImpl implements AdminBiz {
 
     private @NonNull XxlJobInfo getXxlJobInfo(JobInfoRequest jobInfoRequest) {
         XxlJobInfo jobInfo = new XxlJobInfo();
-        BeanUtils.copyProperties(jobInfo, jobInfoRequest);
+        BeanUtils.copyProperties(jobInfoRequest, jobInfo);
         return jobInfo;
     }
 

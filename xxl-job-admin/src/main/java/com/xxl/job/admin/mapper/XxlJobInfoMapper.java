@@ -33,7 +33,7 @@ public interface XxlJobInfoMapper {
 
 	public XxlJobInfo loadById(@Param("id") int id);
 
-	public int getJobId(@Param("jobGroup") int jobGroup, @Param("jobDesc") String jobDesc);
+	public Integer getJobId(@Param("jobGroup") int jobGroup, @Param("jobDesc") String jobDesc);
 	
 	public int update(XxlJobInfo xxlJobInfo);
 	

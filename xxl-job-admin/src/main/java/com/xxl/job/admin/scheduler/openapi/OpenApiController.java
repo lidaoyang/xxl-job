@@ -76,21 +76,21 @@ public class OpenApiController {
                     yield adminBiz.addJob(jobInfoParam);
                 }
                 case "removeJob" -> {
-                    Map<String, Object> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, Object.class);
-                    String jobName = jsonMap.get("jobName").toString();
-                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup").toString());
+                    Map<String, String> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, String.class);
+                    String jobName = jsonMap.get("jobName");
+                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup"));
                     yield adminBiz.removeJob(jobGroup, jobName);
                 }
                 case "startJob" -> {
-                    Map<String, Object> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, Object.class);
-                    String jobName = jsonMap.get("jobName").toString();
-                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup").toString());
+                    Map<String, String> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, String.class);
+                    String jobName = jsonMap.get("jobName");
+                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup"));
                     yield adminBiz.startJob(jobGroup, jobName);
                 }
                 case "stopJob" -> {
-                    Map<String, Object> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, Object.class);
-                    String jobName = jsonMap.get("jobName").toString();
-                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup").toString());
+                    Map<String, String> jsonMap = GsonTool.fromJsonMap(requestBody, String.class, String.class);
+                    String jobName = jsonMap.get("jobName");
+                    int jobGroup = Integer.parseInt(jsonMap.get("jobGroup"));
                     yield adminBiz.stopJob(jobGroup, jobName);
                 }
                 default -> Response.ofFail("invalid request, uri-mapping(" + uri + ") not found.");

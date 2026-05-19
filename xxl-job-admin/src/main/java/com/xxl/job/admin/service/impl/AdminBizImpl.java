@@ -49,6 +49,12 @@ public class AdminBizImpl implements AdminBiz {
         // 转换为XxlJobInfo
         XxlJobInfo jobInfo = getXxlJobInfo(jobInfoRequest);
         LoginInfo loginInfo = getLoginInfo();
+        Integer jobId = xxlJobService.getJobId(jobInfo.getJobGroup(), jobInfo.getJobDesc());
+        if (jobId != null) {
+            // 任务已存在, 直接启动
+            startJob(jobInfo.getJobGroup(), jobInfo.getJobDesc());
+            return Response.ofSuccess(jobId.toString());
+        }
         return xxlJobService.add(jobInfo, loginInfo);
     }
 
